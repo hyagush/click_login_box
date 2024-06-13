@@ -1,6 +1,5 @@
-import 'package:example/custom_dio.dart';
+import 'package:click_login_page/click_login_box.dart';
 import 'package:flutter/material.dart';
-import 'package:click_login_page/click_login_page.dart';
 import 'package:svg_flutter/svg.dart';
 
 void main() {
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Click Login Box',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

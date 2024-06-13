@@ -1,4 +1,4 @@
-import 'package:click_login_page/click_login_box.dart';
+import 'package:click_login_box/click_login_box.dart';
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 

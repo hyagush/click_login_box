@@ -28,7 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  click_login_page:
+  click_login_box:
     path:  ../
   flutter:
     sdk: flutter

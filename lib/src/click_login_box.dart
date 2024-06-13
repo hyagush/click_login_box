@@ -1,4 +1,4 @@
-import 'package:click_login_page/src/login_model.dart';
+import 'package:click_login_box/src/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

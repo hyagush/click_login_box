@@ -6,7 +6,7 @@ Basta importar e usar o widget, assim como o exemplo abaixo:
 
 ```dart
 
-import 'package:click_login_page/click_login_box.dart';
+import 'package:click_login_box/click_login_box.dart';
 
 ClickLoginBox(
         loginType: LoginType.id,

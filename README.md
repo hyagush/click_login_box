@@ -20,5 +20,5 @@ ClickLoginBox(
           await Future.delayed(const Duration(seconds: 5));
           debugPrint(loginModel.toJson());
         },
-      ),;
+      ),
 ```

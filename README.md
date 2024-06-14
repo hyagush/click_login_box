@@ -5,7 +5,6 @@ Widget criado com a intenção de colocar no projeto um login da Click.
 Basta importar e usar o widget, assim como o exemplo abaixo:
 
 ```dart
-
 import 'package:click_login_box/click_login_box.dart';
 
 ClickLoginBox(

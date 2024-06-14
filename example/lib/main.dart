@@ -9,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,8 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
         applicationName: 'CLICK ORDER',
         applicationVersionText: 'Click Order\nVersão - 1.0.0',
         onPressedLogin: (loginModel) async {
-          await Future.delayed(const Duration(seconds: 3));
           debugPrint(loginModel.toJson());
+          await Future.delayed(const Duration(seconds: 3));
         },
         onPressedForgotPassword: () async {
           debugPrint('Esqueci a senha');

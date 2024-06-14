@@ -250,8 +250,8 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                                       try {
                                         final input = LoginModel(
                                           id: int.tryParse(_personIdEC.text),
-                                          email: _emailEC.text,
-                                          password: _passwordEC.text,
+                                          email: _emailEC.text.isNotEmpty ? _emailEC.text : null,
+                                          password: _passwordEC.text.isNotEmpty ? _passwordEC.text : null,
                                         );
                                         await widget.onPressedLogin!(input);
                                       } catch (e) {

@@ -1,3 +1,7 @@
+## 1.0.6
+
+* Correção no model de retorno, enviado nulo caso não preenchido o campo.
+
 ## 1.0.5
 
 * Corrigido erro no layout dos textos para evitar overflow.

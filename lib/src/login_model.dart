@@ -13,9 +13,9 @@ class LoginModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      if (email != null) 'email': email,
-      if (id != null) 'id': id,
-      if (password != null) 'password': password,
+      'email': email,
+      'id': id,
+      'password': password,
     };
   }
 

@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Click Login Box',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+        ),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Click Login Box'),
@@ -45,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           'assets/white-logo.svg',
         ),
         applicationName: 'CLICK ORDER',
-        applicationVersionText: 'Versão - 1.0.0',
+        applicationVersionText: 'Click Order\nVersão - 1.0.0',
         onPressedLogin: (loginModel) async {
           await Future.delayed(const Duration(seconds: 3));
           debugPrint(loginModel.toJson());

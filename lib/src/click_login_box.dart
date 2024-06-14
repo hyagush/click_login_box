@@ -1,7 +1,6 @@
 import 'package:click_login_box/src/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 enum LoginType {
   id,
@@ -42,6 +41,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
   final _passwordEC = TextEditingController();
   var _inputDecorationTextFormField = const InputDecoration();
   var _textStyleTextFormField = const TextStyle();
+  var _buttonStyle = const ButtonStyle();
 
   final ValueNotifier<bool> _isPasswordVisible = ValueNotifier<bool>(false);
   final ValueNotifier<bool> _isWidgetLocked = ValueNotifier<bool>(false);
@@ -97,6 +97,19 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
     _textStyleTextFormField =
         Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.9), fontSize: 14);
 
+    _buttonStyle = ElevatedButton.styleFrom(
+      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+      textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            fontSize: 18,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+      elevation: 3,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      disabledBackgroundColor: Colors.grey,
+    );
+
     return Center(
       child: Card(
         color: Theme.of(context).cardTheme.color,
@@ -124,15 +137,19 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
               const SizedBox(
                 height: 15,
               ),
-              Text(widget.applicationName,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        height: 1,
-                        color: Theme.of(context).colorScheme.primary,
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.3,
-                      )),
+              Text(
+                widget.applicationName,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      height: 1,
+                      color: Theme.of(context).colorScheme.primary,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -0.3,
+                    ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 10),
                 child: widget.loginType == LoginType.email
@@ -189,6 +206,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                                     splashColor: Colors.transparent,
                                     onTap: widgetLocked ? null : widget.onPressedForgotPassword,
                                     child: Text(
+                                      textAlign: TextAlign.center,
                                       widget.forgotPasswordText ?? 'Esqueceu sua senha?',
                                       style: TextStyle(
                                         color: widgetLocked ? Colors.grey : Theme.of(context).colorScheme.primary,
@@ -223,12 +241,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                         valueListenable: _isWidgetLocked,
                         builder: (context, widgetLocked, child) {
                           return ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                              elevation: 3,
-                              disabledBackgroundColor: Colors.grey,
-                            ),
+                            style: Theme.of(context).elevatedButtonTheme.style ?? _buttonStyle,
                             onPressed: _isWidgetLocked.value
                                 ? null
                                 : () async {
@@ -248,28 +261,24 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                                       }
                                     }
                                   },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Text(
-                                    widget.buttonName,
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                          fontSize: 18,
-                                          color: Theme.of(context).colorScheme.onPrimary,
-                                        ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Text(
+                                  widget.buttonName,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                                Visibility(
+                                  visible: widgetLocked,
+                                  child: const SizedBox(
+                                    height: 15,
+                                    width: 15,
+                                    child: CircularProgressIndicator(),
                                   ),
-                                  Visibility(
-                                    visible: widgetLocked,
-                                    child: const SizedBox(
-                                      height: 15,
-                                      width: 15,
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           );
                         },
@@ -285,9 +294,13 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        widget.applicationVersionText ?? '',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 11),
+                      Expanded(
+                        child: Text(
+                          widget.applicationVersionText ?? '',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 11, overflow: TextOverflow.ellipsis),
+                        ),
                       ),
                     ],
                   ),

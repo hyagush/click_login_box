@@ -1,3 +1,8 @@
+## 1.0.5
+
+* Corrigido erro no layout dos textos para evitar overflow.
+* Botão com tema próprio caso não tenha estilo no ElevatedButton do seu projeto.
+
 ## 1.0.4
 
 * Corrigido erro no layout do botão.

@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page Test'),
+      home: const MyHomePage(title: 'Click Login Box'),
     );
   }
 }
@@ -40,16 +40,19 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ClickLoginBox(
+        forgotPasswordText: 'Esqueceu sua senha?',
         loginType: LoginType.id,
-        showForgotPassword: true,
         logo: SvgPicture.asset(
           'assets/white-logo.svg',
         ),
         applicationName: 'CLICK ORDER',
         applicationVersionText: 'Versão - 1.0.0',
         onPressedLogin: (loginModel) async {
-          await Future.delayed(const Duration(seconds: 5));
+          await Future.delayed(const Duration(seconds: 3));
           debugPrint(loginModel.toJson());
+        },
+        onPressedForgotPassword: () async {
+          debugPrint('Esqueci a senha');
         },
       ),
     );

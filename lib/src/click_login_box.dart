@@ -14,7 +14,7 @@ class ClickLoginBox extends StatefulWidget {
   final void Function()? onPressedForgotPassword;
   final String applicationName;
   final String? applicationVersionText;
-  final String forgotPasswordText;
+  final String? forgotPasswordText;
   final String buttonName;
   final Widget logo;
   final bool showForgotPassword;
@@ -29,7 +29,7 @@ class ClickLoginBox extends StatefulWidget {
     this.onPressedLogin,
     this.onPressedForgotPassword,
     this.showForgotPassword = false,
-    required this.forgotPasswordText,
+    this.forgotPasswordText,
   });
 
   @override
@@ -191,7 +191,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                                     splashColor: Colors.transparent,
                                     onTap: widgetLocked ? null : widget.onPressedForgotPassword,
                                     child: Text(
-                                      widget.forgotPasswordText,
+                                      widget.forgotPasswordText ?? 'Esqueceu sua senha?',
                                       style: TextStyle(
                                         color: widgetLocked ? Colors.grey : Theme.of(context).colorScheme.primary,
                                         decoration: TextDecoration.underline,

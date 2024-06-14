@@ -40,7 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ClickLoginBox(
-        forgotPasswordText: 'Esqueceu sua senha?',
         loginType: LoginType.id,
         logo: SvgPicture.asset(
           'assets/white-logo.svg',

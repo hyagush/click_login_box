@@ -1,6 +1,6 @@
 name: click_login_box
 description: Package realizado para utilizar a Login Page nos projetos da Click.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/hyagush/click_login_box
 
 environment:

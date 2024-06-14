@@ -1,3 +1,7 @@
+## 1.0.4
+
+* Corrigido erro no layout do botão.
+
 ## 1.0.3
 
 * Texto "Esqueceu a senha?" não é mais obrigatório.

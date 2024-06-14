@@ -124,17 +124,15 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
               const SizedBox(
                 height: 15,
               ),
-              Text(
-                widget.applicationName,
-                style: TextStyle(
-                  height: 1,
-                  color: Theme.of(context).colorScheme.primary,
-                  overflow: TextOverflow.ellipsis,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.3,
-                ),
-              ),
+              Text(widget.applicationName,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        height: 1,
+                        color: Theme.of(context).colorScheme.primary,
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.3,
+                      )),
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 10),
                 child: widget.loginType == LoginType.email
@@ -216,71 +214,69 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                   },
                 ),
               ),
-              SizedBox(
-                height: 100,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                        child: ValueListenableBuilder<bool>(
-                          valueListenable: _isWidgetLocked,
-                          builder: (context, widgetLocked, child) {
-                            return ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.primary,
-                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                                elevation: 3,
-                                disabledBackgroundColor: Colors.grey,
-                              ),
-                              onPressed: _isWidgetLocked.value
-                                  ? null
-                                  : () async {
-                                      _isWidgetLocked.value = !widgetLocked;
-                                      if (widget.onPressedLogin != null) {
-                                        try {
-                                          final input = LoginModel(
-                                            id: int.tryParse(_personIdEC.text),
-                                            email: _emailEC.text,
-                                            password: _passwordEC.text,
-                                          );
-                                          await widget.onPressedLogin!(input);
-                                        } catch (e) {
-                                          debugPrint('Error: ');
-                                        } finally {
-                                          _isWidgetLocked.value = widgetLocked;
-                                        }
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable: _isWidgetLocked,
+                        builder: (context, widgetLocked, child) {
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                              elevation: 3,
+                              disabledBackgroundColor: Colors.grey,
+                            ),
+                            onPressed: _isWidgetLocked.value
+                                ? null
+                                : () async {
+                                    _isWidgetLocked.value = !widgetLocked;
+                                    if (widget.onPressedLogin != null) {
+                                      try {
+                                        final input = LoginModel(
+                                          id: int.tryParse(_personIdEC.text),
+                                          email: _emailEC.text,
+                                          password: _passwordEC.text,
+                                        );
+                                        await widget.onPressedLogin!(input);
+                                      } catch (e) {
+                                        debugPrint('Error: ');
+                                      } finally {
+                                        _isWidgetLocked.value = widgetLocked;
                                       }
-                                    },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Text(
-                                      widget.buttonName,
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                            color: Theme.of(context).colorScheme.onPrimary,
-                                          ),
+                                    }
+                                  },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Text(
+                                    widget.buttonName,
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                          fontSize: 18,
+                                          color: Theme.of(context).colorScheme.onPrimary,
+                                        ),
+                                  ),
+                                  Visibility(
+                                    visible: widgetLocked,
+                                    child: const SizedBox(
+                                      height: 15,
+                                      width: 15,
+                                      child: CircularProgressIndicator(),
                                     ),
-                                    Visibility(
-                                      visible: widgetLocked,
-                                      child: const SizedBox(
-                                        height: 15,
-                                        width: 15,
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Visibility(
                 visible: widget.applicationVersionText != null,

@@ -1,6 +1,7 @@
 import 'package:click_login_box/src/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 enum LoginType {
   id,
@@ -10,8 +11,11 @@ enum LoginType {
 class ClickLoginBox extends StatefulWidget {
   final LoginType loginType;
   final Future<void> Function(LoginModel loginModel)? onPressedLogin;
+  final void Function()? onPressedForgotPassword;
   final String applicationName;
-  final String applicationVersionText;
+  final String? applicationVersionText;
+  final String forgotPasswordText;
+  final String buttonName;
   final Widget logo;
   final bool showForgotPassword;
 
@@ -19,10 +23,13 @@ class ClickLoginBox extends StatefulWidget {
     super.key,
     required this.loginType,
     required this.applicationName,
-    required this.applicationVersionText,
+    this.applicationVersionText,
+    this.buttonName = 'LOGAR',
     required this.logo,
     this.onPressedLogin,
+    this.onPressedForgotPassword,
     this.showForgotPassword = false,
+    required this.forgotPasswordText,
   });
 
   @override
@@ -37,7 +44,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
   var _textStyleTextFormField = const TextStyle();
 
   final ValueNotifier<bool> _isPasswordVisible = ValueNotifier<bool>(false);
-  final ValueNotifier<bool> _isButtonLocked = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _isWidgetLocked = ValueNotifier<bool>(false);
 
   @override
   void dispose() {
@@ -95,8 +102,8 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
         color: Theme.of(context).cardTheme.color,
         child: SizedBox(
           width: 320,
-          height: widget.showForgotPassword ? 427 : 399,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 height: 100,
@@ -163,118 +170,131 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                 padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
                 child: ValueListenableBuilder<bool>(
                   valueListenable: _isPasswordVisible,
-                  builder: (context, isVisible, child) => TextFormField(
-                    controller: _passwordEC,
-                    obscureText: !isVisible,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.9)),
-                    decoration: _inputDecorationTextFormField.copyWith(
-                      label: const Text('Senha'),
-                      prefixIcon: const Icon(
-                        Icons.lock,
-                        size: 20,
+                  builder: (context, isVisible, child) {
+                    return TextFormField(
+                      controller: _passwordEC,
+                      obscureText: !isVisible,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.9)),
+                      decoration: _inputDecorationTextFormField.copyWith(
+                        label: const Text('Senha'),
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          size: 20,
+                        ),
+                        counter: widget.showForgotPassword
+                            ? ValueListenableBuilder<bool>(
+                                valueListenable: _isWidgetLocked,
+                                builder: (context, widgetLocked, child) {
+                                  return InkWell(
+                                    highlightColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    onTap: widgetLocked ? null : widget.onPressedForgotPassword,
+                                    child: Text(
+                                      widget.forgotPasswordText,
+                                      style: TextStyle(
+                                        color: widgetLocked ? Colors.grey : Theme.of(context).colorScheme.primary,
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: widgetLocked ? Colors.grey : Theme.of(context).colorScheme.primary,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : null,
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            _isPasswordVisible.value = !isVisible;
+                          },
+                          borderRadius: const BorderRadius.all(Radius.circular(50)),
+                          child: Icon(
+                            isVisible ? Icons.visibility : Icons.visibility_off,
+                          ),
+                        ),
                       ),
-                      counter: widget.showForgotPassword
-                          ? InkWell(
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              onTap: () {},
-                              child: Text(
-                                'Esqueceu sua senha?',
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: Theme.of(context).colorScheme.primary,
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 100,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: ValueListenableBuilder<bool>(
+                          valueListenable: _isWidgetLocked,
+                          builder: (context, widgetLocked, child) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                                elevation: 3,
+                                disabledBackgroundColor: Colors.grey,
+                              ),
+                              onPressed: _isWidgetLocked.value
+                                  ? null
+                                  : () async {
+                                      _isWidgetLocked.value = !widgetLocked;
+                                      if (widget.onPressedLogin != null) {
+                                        try {
+                                          final input = LoginModel(
+                                            id: int.tryParse(_personIdEC.text),
+                                            email: _emailEC.text,
+                                            password: _passwordEC.text,
+                                          );
+                                          await widget.onPressedLogin!(input);
+                                        } catch (e) {
+                                          debugPrint('Error: ');
+                                        } finally {
+                                          _isWidgetLocked.value = widgetLocked;
+                                        }
+                                      }
+                                    },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Text(
+                                      widget.buttonName,
+                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                            color: Theme.of(context).colorScheme.onPrimary,
+                                          ),
+                                    ),
+                                    Visibility(
+                                      visible: widgetLocked,
+                                      child: const SizedBox(
+                                        height: 15,
+                                        width: 15,
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            )
-                          : null,
-                      suffixIcon: InkWell(
-                        onTap: () {
-                          _isPasswordVisible.value = !isVisible;
-                        },
-                        borderRadius: const BorderRadius.all(Radius.circular(50)),
-                        child: Icon(
-                          isVisible ? Icons.visibility : Icons.visibility_off,
+                            );
+                          },
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      child: ValueListenableBuilder(
-                        valueListenable: _isButtonLocked,
-                        builder: (context, buttonLocked, child) {
-                          return ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-                              elevation: 3,
-                              disabledBackgroundColor: Colors.grey,
-                            ),
-                            onPressed: _isButtonLocked.value
-                                ? null
-                                : () async {
-                                    _isButtonLocked.value = !buttonLocked;
-                                    if (widget.onPressedLogin != null) {
-                                      try {
-                                        final input = LoginModel(
-                                          idPessoa: int.tryParse(_personIdEC.text),
-                                          email: _emailEC.text,
-                                          password: _passwordEC.text,
-                                        );
-                                        await widget.onPressedLogin!(input);
-                                      } catch (e) {
-                                        debugPrint('Error: ');
-                                      } finally {
-                                        _isButtonLocked.value = buttonLocked;
-                                      }
-                                    }
-                                  },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Text(
-                                    'LOGAR',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                          color: Theme.of(context).colorScheme.onPrimary,
-                                        ),
-                                  ),
-                                  Visibility(
-                                    visible: buttonLocked,
-                                    child: const SizedBox(
-                                      height: 15,
-                                      width: 15,
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+              Visibility(
+                visible: widget.applicationVersionText != null,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.applicationVersionText ?? '',
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 11),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.applicationVersionText,
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 11),
-                    ),
-                  ],
                 ),
               ),
             ],

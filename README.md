@@ -9,16 +9,19 @@ Basta importar e usar o widget, assim como o exemplo abaixo:
 import 'package:click_login_box/click_login_box.dart';
 
 ClickLoginBox(
+        forgotPasswordText: 'Esqueceu sua senha?',
         loginType: LoginType.id,
-        showForgotPassword: true,
         logo: SvgPicture.asset(
           'assets/white-logo.svg',
         ),
         applicationName: 'CLICK ORDER',
         applicationVersionText: 'Versão - 1.0.0',
         onPressedLogin: (loginModel) async {
-          await Future.delayed(const Duration(seconds: 5));
+          await Future.delayed(const Duration(seconds: 3));
           debugPrint(loginModel.toJson());
+        },
+        onPressedForgotPassword: () async {
+          debugPrint('Esqueci a senha');
         },
       ),
 ```

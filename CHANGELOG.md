@@ -1,3 +1,7 @@
+## 1.0.7
+
+* Fontsize do ID e E-mail corrigida, para ficar de acordo com a senha.
+
 ## 1.0.6
 
 * Correção no model de retorno, enviado nulo caso não preenchido o campo.

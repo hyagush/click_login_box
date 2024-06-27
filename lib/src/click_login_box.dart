@@ -95,7 +95,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
     );
 
     _textStyleTextFormField =
-        Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.9), fontSize: 14);
+        Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.9));
 
     _buttonStyle = ElevatedButton.styleFrom(
       foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -189,7 +189,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                     return TextFormField(
                       controller: _passwordEC,
                       obscureText: !isVisible,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).textTheme.bodyMedium!.color!.withOpacity(0.9)),
+                      style: _textStyleTextFormField,
                       decoration: _inputDecorationTextFormField.copyWith(
                         label: const Text('Senha'),
                         prefixIcon: const Icon(

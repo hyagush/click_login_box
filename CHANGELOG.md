@@ -1,3 +1,7 @@
+## 1.0.8
+
+* Adicionado nos dois campos a função de onFieldSubmitted para acionar o Login.
+
 ## 1.0.7
 
 * Fontsize do ID e E-mail corrigida, para ficar de acordo com a senha.

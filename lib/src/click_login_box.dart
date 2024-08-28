@@ -164,6 +164,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                             size: 20,
                           ),
                         ),
+                        onFieldSubmitted: onTapLogin(),
                       )
                     : TextFormField(
                         controller: _personIdEC,
@@ -179,6 +180,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                             size: 20,
                           ),
                         ),
+                        onFieldSubmitted: onTapLogin(),
                       ),
               ),
               Padding(
@@ -187,6 +189,7 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                   valueListenable: _isPasswordVisible,
                   builder: (context, isVisible, child) {
                     return TextFormField(
+                      onFieldSubmitted: onTapLogin(),
                       controller: _passwordEC,
                       obscureText: !isVisible,
                       style: _textStyleTextFormField,
@@ -245,19 +248,21 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
                             onPressed: _isWidgetLocked.value
                                 ? null
                                 : () async {
-                                    _isWidgetLocked.value = !widgetLocked;
-                                    if (widget.onPressedLogin != null) {
-                                      try {
-                                        final input = LoginModel(
-                                          id: int.tryParse(_personIdEC.text),
-                                          email: _emailEC.text.isNotEmpty ? _emailEC.text : null,
-                                          password: _passwordEC.text.isNotEmpty ? _passwordEC.text : null,
-                                        );
-                                        await widget.onPressedLogin!(input);
-                                      } catch (e) {
-                                        debugPrint('Error: ');
-                                      } finally {
-                                        _isWidgetLocked.value = widgetLocked;
+                                    if (_passwordEC.text.isNotEmpty) {
+                                      _isWidgetLocked.value = !widgetLocked;
+                                      if (widget.onPressedLogin != null) {
+                                        try {
+                                          final input = LoginModel(
+                                            id: int.tryParse(_personIdEC.text),
+                                            email: _emailEC.text.isNotEmpty ? _emailEC.text : null,
+                                            password: _passwordEC.text.isNotEmpty ? _passwordEC.text : null,
+                                          );
+                                          await widget.onPressedLogin!(input);
+                                        } catch (e) {
+                                          debugPrint('Error: ');
+                                        } finally {
+                                          _isWidgetLocked.value = widgetLocked;
+                                        }
                                       }
                                     }
                                   },
@@ -311,5 +316,29 @@ class _ClickLoginBoxState extends State<ClickLoginBox> {
         ),
       ),
     );
+  }
+
+  Function(String)? onTapLogin() {
+    return _isWidgetLocked.value
+        ? null
+        : (_) async {
+            if (_passwordEC.text.isNotEmpty) {
+              _isWidgetLocked.value = true;
+              if (widget.onPressedLogin != null) {
+                try {
+                  final input = LoginModel(
+                    id: int.tryParse(_personIdEC.text),
+                    email: _emailEC.text.isNotEmpty ? _emailEC.text : null,
+                    password: _passwordEC.text.isNotEmpty ? _passwordEC.text : null,
+                  );
+                  await widget.onPressedLogin!(input);
+                } catch (e) {
+                  debugPrint('Error: ');
+                } finally {
+                  _isWidgetLocked.value = false;
+                }
+              }
+            }
+          };
   }
 }
